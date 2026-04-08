@@ -24,7 +24,7 @@ target_chats = [
 
 # 🔗 BUTTON LINKS
 PANEL_LINK = "https://t.me/your_panel"
-UPDATES_LINK = "https://t.me/your_updates"
+UPDATES_LINK = "https://t.me/+QTngt5Zd1BVjZTI1"
 
 client = TelegramClient('session', api_id, api_hash)
 
@@ -83,7 +83,7 @@ async def handler(event):
 
     otp = extract_otp(msg)
 
-    # ❌ Normal message ignore
+    # ❌ Ignore normal messages
     if not otp:
         return
 
@@ -96,8 +96,8 @@ async def handler(event):
     # 🌍 Flag detect
     flag = get_flag(msg)
 
-    # 🔢 Mask
-    msg = mask_number(msg)
+    # 🔢 Mask number
+    masked_msg = mask_number(msg)
 
     # 🧠 Final format
     final_msg = f"""
@@ -105,7 +105,7 @@ async def handler(event):
 
 📩 OTP CODE DETECTED
 
-{msg}
+{masked_msg}
 
 🔐 OTP: {otp}
 
@@ -115,7 +115,7 @@ async def handler(event):
     # 🧾 Save log
     save_log(final_msg)
 
-    # 📤 Send
+    # 📤 Send to targets
     for target in target_chats:
         sent = await client.send_message(
             target,
@@ -142,6 +142,11 @@ async def set_updates(event):
         await event.reply("✅ Updates link updated")
 
 
-print("🔥 GOD MODE BOT RUNNING...")
-client.start()
-client.run_until_disconnected()
+# 🚀 MAIN START (Render safe)
+async def main():
+    print("🔥 GOD MODE BOT RUNNING...")
+    await client.start()
+    await client.run_until_disconnected()
+
+with client:
+    client.loop.run_until_complete(main())
